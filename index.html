@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trusted Funder — Elite Trading Capital</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg:#0a0a0b;--bg-elevated:#111113;--bg-card:#18181b;--fg:#f0ece4;--fg-muted:#8a8680;
+    --accent:#c8a44e;--accent-bright:#e6c45a;--accent-dim:#8b7033;
+    --danger:#e04848;--success:#3dba6f;--border:#2a2a2e;
+    --inr:#ff9933;--inr-dim:rgba(255,153,51,0.1);--inr-border:rgba(255,153,51,0.25);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden}
+  h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif}
+  .font-display{font-family:'Space Grotesk',sans-serif}
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--accent-dim)}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(200,164,78,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,164,78,0.03) 1px,transparent 1px);
+    background-size:60px 60px}
+  .grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(200,164,78,0.06) 0%,transparent 60%)}
+  .orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;opacity:0.4}
+  .orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(200,164,78,0.15),transparent 70%);top:-100px;left:-100px;animation:oF1 20s ease-in-out infinite}
+  .orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(200,164,78,0.08),transparent 70%);bottom:10%;right:-50px;animation:oF2 25s ease-in-out infinite}
+  .orb-3{width:300px;height:300px;background:radial-gradient(circle,rgba(61,186,111,0.06),transparent 70%);top:50%;left:40%;animation:oF3 18s ease-in-out infinite}
+  @keyframes oF1{0%,100%{transform:translate(0,0)}33%{transform:translate(80px,60px)}66%{transform:translate(-40px,100px)}}
+  @keyframes oF2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-80px)}}
+  @keyframes oF3{0%,100%{transform:translate(0,0)}33%{transform:translate(50px,-40px)}66%{transform:translate(-30px,50px)}}
+  .ticker-tape{display:flex;animation:tScroll 40s linear infinite;white-space:nowrap}
+  @keyframes tScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-bright));color:#0a0a0b;font-weight:600;padding:14px 32px;border-radius:8px;border:none;cursor:pointer;font-size:15px;transition:all .3s;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif}
+  .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.2) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s}
+  .btn-primary:hover::before{transform:translateX(100%)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,164,78,.3)}
+  .btn-secondary{background:transparent;color:var(--fg);font-weight:500;padding:14px 32px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:15px;transition:all .3s;font-family:'DM Sans',sans-serif}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,164,78,.05)}
+  .btn-inr{background:linear-gradient(135deg,#ff9933,#ffb84d);color:#0a0a0b;font-weight:600;padding:14px 32px;border-radius:8px;border:none;cursor:pointer;font-size:15px;transition:all .3s;font-family:'DM Sans',sans-serif}
+  .btn-inr:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,153,51,.3)}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;transition:all .3s}
+  .card:hover{border-color:rgba(200,164,78,.3);box-shadow:0 4px 20px rgba(0,0,0,.3)}
+  .card-inr{background:var(--bg-card);border:1px solid var(--inr-border);border-radius:12px;transition:all .3s}
+  .card-inr:hover{border-color:rgba(255,153,51,.4);box-shadow:0 4px 20px rgba(255,153,51,.08)}
+  .stat-pulse{position:relative}
+  .stat-pulse::after{content:'';position:absolute;top:12px;right:12px;width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(61,186,111,.4)}50%{opacity:.7;box-shadow:0 0 0 8px rgba(61,186,111,0)}}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+  .modal-overlay.active{opacity:1;pointer-events:all}
+  .modal-box{background:var(--bg-elevated);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:500px;margin:0 16px;transform:translateY(20px) scale(.97);transition:transform .3s}
+  .modal-overlay.active .modal-box{transform:translateY(0) scale(1)}
+  .input-field{width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--fg);font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color .2s;outline:none}
+  .input-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,164,78,.1)}
+  .input-field::placeholder{color:var(--fg-muted)}
+  .input-inr:focus{border-color:var(--inr)!important;box-shadow:0 0 0 3px rgba(255,153,51,.1)!important}
+  .sidebar{width:260px;min-height:100vh;background:var(--bg-elevated);border-right:1px solid var(--border);position:fixed;left:0;top:0;z-index:100;display:flex;flex-direction:column;transition:transform .3s}
+  .sidebar-link{display:flex;align-items:center;gap:12px;padding:11px 20px;color:var(--fg-muted);font-size:14px;cursor:pointer;border-radius:8px;margin:2px 12px;transition:all .2s;border:none;background:none;width:calc(100% - 24px);text-align:left;font-family:'DM Sans',sans-serif}
+  .sidebar-link:hover{color:var(--fg);background:rgba(255,255,255,.03)}
+  .sidebar-link.active{color:var(--accent);background:rgba(200,164,78,.08)}
+  .sidebar-link i{width:20px;text-align:center;font-size:15px}
+  .portal-main{margin-left:260px;min-height:100vh;padding:24px 32px}
+  .trade-row{display:grid;grid-template-columns:100px 80px 80px 100px 100px 100px 90px;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;align-items:center;transition:background .15s}
+  .trade-row:hover{background:rgba(255,255,255,.02)}
+  .toast-container{position:fixed;top:20px;right:20px;z-index:2000;display:flex;flex-direction:column;gap:8px}
+  .toast{padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;animation:tIn .4s ease,tOut .4s ease 3s forwards;max-width:400px}
+  .toast-success{background:rgba(61,186,111,.15);border:1px solid rgba(61,186,111,.3);color:var(--success)}
+  .toast-error{background:rgba(224,72,72,.15);border:1px solid rgba(224,72,72,.3);color:var(--danger)}
+  .toast-info{background:rgba(200,164,78,.15);border:1px solid rgba(200,164,78,.3);color:var(--accent)}
+  .toast-inr{background:var(--inr-dim);border:1px solid var(--inr-border);color:var(--inr)}
+  @keyframes tIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes tOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(40px)}}
+  .counter-value{display:inline-block;font-variant-numeric:tabular-nums}
+  .pricing-featured{position:relative}
+  .pricing-featured::before{content:'';position:absolute;inset:-1px;border-radius:13px;background:linear-gradient(135deg,var(--accent),transparent 60%);z-index:-1;opacity:.6}
+  .nav-blur{background:rgba(10,10,11,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .scroll-reveal{opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.22,1,.36,1)}
+  .scroll-reveal.revealed{opacity:1;transform:translateY(0)}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+  .faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .3s}
+  .faq-item:hover,.faq-item.open{border-color:rgba(200,164,78,.3)}
+  .faq-question{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-weight:600;font-size:15px;background:none;border:none;color:var(--fg);width:100%;text-align:left;font-family:'Space Grotesk',sans-serif;transition:color .2s}
+  .faq-question:hover{color:var(--accent)}
+  .faq-answer{max-height:0;overflow:hidden;transition:max-height .4s,padding .4s;padding:0 24px}
+  .faq-item.open .faq-answer{max-height:300px;padding:0 24px 20px}
+  .faq-item.open .faq-chevron{transform:rotate(180deg)}
+  .faq-chevron{transition:transform .3s;color:var(--fg-muted)}
+  .inr-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:var(--inr-dim);color:var(--inr);border:1px solid var(--inr-border)}
+  .inr-flag{width:14px;height:10px;border-radius:2px;background:linear-gradient(180deg,#ff9933 33%,#fff 33% 66%,#138808 66%);display:inline-block}
+  .withdrawal-row{display:grid;grid-template-columns:120px 100px 100px 140px 120px 100px;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);font-size:13px;align-items:center;transition:background .15s}
+  .withdrawal-row:hover{background:rgba(255,255,255,.02)}
+  @keyframes scrollDot{0%,100%{opacity:1;transform:translateY(0)}50%{opacity:.3;transform:translateY(8px)}}
+  @keyframes floatUp{0%{opacity:0;transform:translateY(20px)}20%{opacity:.5}100%{opacity:0;transform:translateY(-80px)}}
+  .mobile-menu-btn{display:none;background:none;border:1px solid var(--border);color:var(--fg);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:16px;align-items:center;justify-content:center}
+  .lock-overlay{position:relative;overflow:hidden}
+  .lock-overlay::after{content:'';position:absolute;inset:0;background:rgba(10,10,11,.6);backdrop-filter:blur(4px);z-index:2;border-radius:12px}
+  .lock-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;color:var(--fg-muted);font-size:28px}
+  @media(max-width:1024px){
+    .sidebar{transform:translateX(-100%)} .sidebar.open{transform:translateX(0)}
+    .portal-main{margin-left:0;padding:16px}
+    .trade-row{grid-template-columns:80px 60px 60px 80px 80px 80px 70px;font-size:11px}
+    .withdrawal-row{grid-template-columns:100px 80px 80px 120px 100px 90px;font-size:11px;gap:4px}
+    .mobile-menu-btn{display:flex}
+  }
+  @media(max-width:768px){.trade-row,.withdrawal-row{grid-template-columns:1fr 1fr;gap:4px}}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ========== LANDING PAGE ========== -->
+<div id="landingPage">
+
+  <!-- Ticker -->
+  <div style="background:var(--bg-elevated);border-bottom:1px solid var(--border);overflow:hidden;padding:10px 0;position:relative;z-index:10;">
+    <div class="ticker-tape" id="tickerTape"></div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav-blur fixed left-0 right-0 z-50" style="top:38px;" id="mainNav">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div class="flex items-center gap-2">
+        <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent-bright));border-radius:6px;display:flex;align-items:center;justify-content:center;">
+          <i class="fas fa-handshake" style="color:#0a0a0b;font-size:13px;"></i>
+        </div>
+        <span class="font-display font-bold text-lg tracking-tight">Trusted Funder</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm" style="color:var(--fg-muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Features</a>
+        <a href="#how-it-works" class="text-sm" style="color:var(--fg-muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">How It Works</a>
+        <a href="#pricing" class="text-sm" style="color:var(--fg-muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Pricing</a>
+        <a href="#faq" class="text-sm" style="color:var(--fg-muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">FAQ</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+        <button class="btn-secondary hidden sm:inline-flex" style="padding:9px 20px;font-size:13px;" onclick="openModal('login')">Sign In</button>
+        <button class="btn-primary" style="padding:9px 20px;font-size:13px;" onclick="openModal('register')">Get Funded</button>
+      </div>
+    </div>
+    <div id="mobileNav" style="display:none;padding:0 24px 16px;border-top:1px solid var(--border);">
+      <a href="#features" style="display:block;padding:10px 0;color:var(--fg-muted);text-decoration:none;font-size:14px;" onclick="toggleMobileNav()">Features</a>
+      <a href="#how-it-works" style="display:block;padding:10px 0;color:var(--fg-muted);text-decoration:none;font-size:14px;" onclick="toggleMobileNav()">How It Works</a>
+      <a href="#pricing" style="display:block;padding:10px 0;color:var(--fg-muted);text-decoration:none;font-size:14px;" onclick="toggleMobileNav()">Pricing</a>
+      <a href="#faq" style="display:block;padding:10px 0;color:var(--fg-muted);text-decoration:none;font-size:14px;" onclick="toggleMobileNav()">FAQ</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="relative min-h-screen flex items-center justify-center overflow-hidden" style="padding-top:120px;">
+    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+    <div id="heroParticles" style="position:absolute;inset:0;pointer-events:none;"></div>
+    <div class="relative z-10 text-center max-w-4xl mx-auto px-6">
+      <div class="badge mb-6" style="background:rgba(200,164,78,.1);color:var(--accent);border:1px solid rgba(200,164,78,.2);">
+        <span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;animation:pulse 2s infinite;"></span>
+        Limited Spots Available — Q1 2025 Cohort
+      </div>
+      <h1 class="font-display font-bold leading-tight mb-6" style="font-size:clamp(40px,6vw,72px);letter-spacing:-.03em;">
+        Trade With<br>
+        <span style="background:linear-gradient(135deg,var(--accent),var(--accent-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Up To $2M</span> In Capital
+      </h1>
+      <p class="text-lg mb-6 max-w-2xl mx-auto" style="color:var(--fg-muted);line-height:1.7;">
+        Prove your edge in our evaluation. Pass the challenge, get funded, and keep up to 90% of your profits. No risk to your own capital — ever.
+      </p>
+      <div class="flex items-center justify-center gap-3 mb-10">
+        <span class="text-sm" style="color:var(--fg-muted);">Pay in</span>
+        <span class="badge" style="background:rgba(200,164,78,.1);color:var(--accent);border:1px solid rgba(200,164,78,.2);padding:5px 12px;font-size:13px;">USD <i class="fas fa-dollar-sign" style="font-size:10px;"></i></span>
+        <i class="fas fa-arrow-right" style="color:var(--fg-muted);font-size:10px;"></i>
+        <span class="text-sm" style="color:var(--fg-muted);">Withdraw in</span>
+        <span class="badge" style="background:var(--inr-dim);color:var(--inr);border:1px solid var(--inr-border);padding:5px 12px;font-size:13px;">INR <span class="inr-flag" style="margin-left:2px;"></span></span>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+        <button class="btn-primary" style="padding:16px 40px;font-size:16px;" onclick="openModal('register')">Start Your Challenge <i class="fas fa-arrow-right ml-2"></i></button>
+        <button class="btn-secondary" style="padding:16px 40px;font-size:16px;" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+        <div class="text-center">
+          <div class="font-display font-bold text-3xl counter-value" data-target="14500" data-prefix="$" data-suffix="+">$0+</div>
+          <div class="text-xs mt-1" style="color:var(--fg-muted);">Total Payouts</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border);" class="hidden md:block"></div>
+        <div class="text-center">
+          <div class="font-display font-bold text-3xl counter-value" data-target="3200" data-suffix="+">0+</div>
+          <div class="text-xs mt-1" style="color:var(--fg-muted);">Funded Traders</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border);" class="hidden md:block"></div>
+        <div class="text-center">
+          <div class="font-display font-bold text-3xl" style="color:var(--success);">90%</div>
+          <div class="text-xs mt-1" style="color:var(--fg-muted);">Profit Split</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border);" class="hidden md:block"></div>
+        <div class="text-center">
+          <div class="font-display font-bold text-3xl" style="color:var(--inr);">24h</div>
+          <div class="text-xs mt-1" style="color:var(--fg-muted);">INR Payout Speed</div>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <span class="text-xs" style="color:var(--fg-muted);">Scroll</span>
+      <div style="width:20px;height:32px;border:1.5px solid var(--border);border-radius:10px;display:flex;justify-content:center;padding-top:6px;">
+        <div style="width:3px;height:8px;background:var(--accent);border-radius:2px;animation:scrollDot 2s ease-in-out infinite;"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Payment flow banner -->
+  <section class="py-8" style="background:linear-gradient(90deg,var(--inr-dim),transparent 50%,rgba(200,164,78,.04));border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
+        <div class="flex items-center gap-3">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(200,164,78,.1);display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-dollar-sign" style="color:var(--accent);"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold">Pay in USD</p>
+            <p class="text-xs" style="color:var(--fg-muted);">Challenge fees in dollars</p>
+          </div>
+        </div>
+        <i class="fas fa-arrow-right hidden md:block" style="color:var(--fg-muted);"></i>
+        <i class="fas fa-arrow-down md:hidden" style="color:var(--fg-muted);"></i>
+        <div class="flex items-center gap-3">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(200,164,78,.1);display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-chart-line" style="color:var(--accent);"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold">Trade & Profit</p>
+            <p class="text-xs" style="color:var(--fg-muted);">Keep up to 90% of gains</p>
+          </div>
+        </div>
+        <i class="fas fa-arrow-right hidden md:block" style="color:var(--fg-muted);"></i>
+        <i class="fas fa-arrow-down md:hidden" style="color:var(--fg-muted);"></i>
+        <div class="flex items-center gap-3">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--inr-dim);display:flex;align-items:center;justify-content:center;">
+            <span class="inr-flag"></span>
+          </div>
+          <div>
+            <p class="text-sm font-semibold" style="color:var(--inr);">Withdraw in INR</p>
+            <p class="text-xs" style="color:var(--fg-muted);">Direct to RBI-registered bank</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 scroll-reveal">
+        <span class="badge mb-4" style="background:rgba(200,164,78,.08);color:var(--accent);border:1px solid rgba(200,164,78,.15);">Platform Features</span>
+        <h2 class="font-display font-bold text-4xl md:text-5xl mb-4" style="letter-spacing:-.02em;">Built For Serious Traders</h2>
+        <p style="color:var(--fg-muted);max-width:520px;margin:0 auto;">Every tool, metric, and rule is designed to give disciplined traders the best possible environment to succeed.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="card p-6 scroll-reveal">
+          <div style="width:44px;height:44px;border-radius:10px;background:rgba(200,164,78,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="fas fa-shield-halved" style="color:var(--accent);"></i></div>
+          <h3 class="font-display font-semibold text-lg mb-2">Capital Protection</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Strict drawdown rules protect the firm's capital while giving you realistic room to execute your strategy.</p>
+        </div>
+        <div class="card p-6 scroll-reveal">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--inr-dim);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="fas fa-money-bill-wave" style="color:var(--inr);"></i></div>
+          <h3 class="font-display font-semibold text-lg mb-2">INR Bank Withdrawals</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Profits converted at live USD-INR rate and transferred directly to your RBI-registered bank account within 24 hours.</p>
+        </div>
+        <div class="card p-6 scroll-reveal">
+          <div style="width:44px;height:44px;border-radius:10px;background:rgba(200,164,78,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="fas fa-chart-line" style="color:var(--accent);"></i></div>
+          <h3 class="font-display font-semibold text-lg mb-2">Real-Time Analytics</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Track every metric — drawdown, win rate, profit factor, Sharpe ratio — all updated in real time.</p>
+        </div>
+        <div class="card p-6 scroll-reveal">
+          <div style="width:44px;height:44px;border-radius:10px;background:rgba(200,164,78,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="fas fa-globe" style="color:var(--accent);"></i></div>
+          <h3 class="font-display font-semibold text-lg mb-2">Multi-Asset Access</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Trade Forex, indices, commodities, and crypto from a single account with competitive spreads.</p>
+        </div>
+        <div class="card p-6 scroll-reveal">
+          <div style="width:44px;height:44px;border-radius:10px;background:rgba(61,186,111,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="fas fa-scale-balanced" style="color:var(--success);"></i></div>
+          <h3 class="font-display font-semibold text-lg mb-2">Fair Rules</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">No hidden fees, no account manipulation. Transparent rules published before you start. News trading allowed.</p>
+        </div>
+        <div class="card p-6 scroll-reveal">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--inr-dim);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><i class="fas fa-university" style="color:var(--inr);"></i></div>
+          <h3 class="font-display font-semibold text-lg mb-2">RBI Compliant Transfers</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">All withdrawals processed through legal banking channels. NEFT/IMPS to any RBI-registered account with proper remittance code.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="py-24 relative" style="border-top:1px solid var(--border);">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 scroll-reveal">
+        <span class="badge mb-4" style="background:rgba(200,164,78,.08);color:var(--accent);border:1px solid rgba(200,164,78,.15);">Process</span>
+        <h2 class="font-display font-bold text-4xl md:text-5xl mb-4" style="letter-spacing:-.02em;">How It Works</h2>
+        <p style="color:var(--fg-muted);max-width:480px;margin:0 auto;">Pay in dollars, trade the markets, withdraw profits in rupees.</p>
+      </div>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="scroll-reveal text-center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,164,78,.08);border:1px solid rgba(200,164,78,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:var(--accent);">1</div>
+          <h3 class="font-display font-semibold text-lg mb-2">Pay in USD</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">One-time challenge fee paid in USD via card, crypto, or wire transfer.</p>
+        </div>
+        <div class="scroll-reveal text-center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,164,78,.08);border:1px solid rgba(200,164,78,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:var(--accent);">2</div>
+          <h3 class="font-display font-semibold text-lg mb-2">Pass Challenge</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Hit the profit target while respecting drawdown limits on your evaluation account.</p>
+        </div>
+        <div class="scroll-reveal text-center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,164,78,.08);border:1px solid rgba(200,164,78,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:var(--accent);">3</div>
+          <h3 class="font-display font-semibold text-lg mb-2">Get Funded</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Receive funded account credentials and start trading with real firm capital.</p>
+        </div>
+        <div class="scroll-reveal text-center">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--inr-dim);border:1px solid var(--inr-border);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:var(--inr);">4</div>
+          <h3 class="font-display font-semibold text-lg mb-2" style="color:var(--inr);">Withdraw in INR</h3>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Profits auto-converted at live rate and sent to your RBI bank via NEFT/IMPS.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-24 relative" style="border-top:1px solid var(--border);">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 scroll-reveal">
+        <span class="badge mb-4" style="background:rgba(200,164,78,.08);color:var(--accent);border:1px solid rgba(200,164,78,.15);">Pricing</span>
+        <h2 class="font-display font-bold text-4xl md:text-5xl mb-4" style="letter-spacing:-.02em;">Choose Your Account Size</h2>
+        <p style="color:var(--fg-muted);max-width:480px;margin:0 auto;">One-time USD fee. No subscriptions. All payouts in INR to your bank.</p>
+      </div>
+      <div class="flex items-center justify-center gap-4 mb-12 scroll-reveal">
+        <span id="phaseLabel1" class="text-sm font-medium" style="color:var(--accent);">1-Phase</span>
+        <button id="phaseToggle" onclick="togglePricingPhase()" style="width:48px;height:26px;border-radius:13px;background:var(--border);border:none;cursor:pointer;position:relative;transition:background .3s;" aria-label="Toggle phase">
+          <div id="phaseToggleDot" style="width:20px;height:20px;border-radius:50%;background:var(--accent);position:absolute;top:3px;left:3px;transition:transform .3s;"></div>
+        </button>
+        <span id="phaseLabel2" class="text-sm font-medium" style="color:var(--fg-muted);">2-Phase</span>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="pricingGrid"></div>
+      <p class="text-center text-xs mt-6" style="color:var(--fg-muted);">All prices in USD. Payouts converted to INR at live exchange rate at time of withdrawal.</p>
+    </div>
+  </section>
+
+  <!-- INR Rate Widget -->
+  <section class="py-16" style="border-top:1px solid var(--border);">
+    <div class="max-w-2xl mx-auto px-6 scroll-reveal">
+      <div class="card-inr p-8 text-center">
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <span class="inr-flag"></span>
+          <span class="font-display font-bold text-lg" style="color:var(--inr);">Live USD to INR Conversion</span>
+        </div>
+        <div class="flex items-center justify-center gap-4 mb-3">
+          <span class="font-display font-bold text-4xl" style="color:var(--fg);">1 USD</span>
+          <i class="fas fa-equals" style="color:var(--fg-muted);font-size:20px;"></i>
+          <span class="font-display font-bold text-4xl" style="color:var(--inr);" id="liveINRRate">₹83.52</span>
+        </div>
+        <p class="text-xs" style="color:var(--fg-muted);">Rate updates every 60 seconds. Actual withdrawal rate may vary slightly at processing time.</p>
+        <div class="mt-6 grid grid-cols-3 gap-4">
+          <div class="text-center p-3 rounded-lg" style="background:rgba(255,255,255,.02);">
+            <p class="text-xs mb-1" style="color:var(--fg-muted);">$100</p>
+            <p class="font-display font-bold text-sm" style="color:var(--inr);" id="conv100">₹8,352</p>
+          </div>
+          <div class="text-center p-3 rounded-lg" style="background:rgba(255,255,255,.02);">
+            <p class="text-xs mb-1" style="color:var(--fg-muted);">$1,000</p>
+            <p class="font-display font-bold text-sm" style="color:var(--inr);" id="conv1000">₹83,520</p>
+          </div>
+          <div class="text-center p-3 rounded-lg" style="background:rgba(255,255,255,.02);">
+            <p class="text-xs mb-1" style="color:var(--fg-muted);">$5,000</p>
+            <p class="font-display font-bold text-sm" style="color:var(--inr);" id="conv5000">₹4,17,600</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-24 relative" style="border-top:1px solid var(--border);">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-16 scroll-reveal">
+        <span class="badge mb-4" style="background:rgba(200,164,78,.08);color:var(--accent);border:1px solid rgba(200,164,78,.15);">FAQ</span>
+        <h2 class="font-display font-bold text-4xl md:text-5xl mb-4" style="letter-spacing:-.02em;">Common Questions</h2>
+      </div>
+      <div class="flex flex-col gap-4" id="faqContainer"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative" style="border-top:1px solid var(--border);">
+    <div class="max-w-3xl mx-auto px-6 text-center scroll-reveal">
+      <div class="card p-12 md:p-16" style="background:linear-gradient(135deg,rgba(200,164,78,.05),rgba(200,164,78,.02));border-color:rgba(200,164,78,.15);">
+        <h2 class="font-display font-bold text-3xl md:text-4xl mb-4" style="letter-spacing:-.02em;">Ready To Prove Your Edge?</h2>
+        <p class="mb-3" style="color:var(--fg-muted);max-width:400px;margin-left:auto;margin-right:auto;">Join thousands of funded traders. Pay in USD, withdraw profits in INR.</p>
+        <div class="flex items-center justify-center gap-2 mb-8">
+          <span class="badge" style="background:rgba(200,164,78,.1);color:var(--accent);border:1px solid rgba(200,164,78,.2);padding:4px 10px;">USD</span>
+          <i class="fas fa-arrow-right" style="color:var(--fg-muted);font-size:9px;"></i>
+          <span class="badge" style="background:var(--inr-dim);color:var(--inr);border:1px solid var(--inr-border);padding:4px 10px;"><span class="inr-flag" style="margin-right:2px;"></span> INR</span>
+        </div>
+        <button class="btn-primary" style="padding:16px 48px;font-size:16px;" onclick="openModal('register')">Start Now <i class="fas fa-arrow-right ml-2"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid var(--border);padding:48px 0 32px;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent-bright));border-radius:5px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-handshake" style="color:#0a0a0b;font-size:11px;"></i></div>
+            <span class="font-display font-bold">Trusted Funder</span>
+          </div>
+          <p class="text-sm" style="color:var(--fg-muted);line-height:1.6;">Elite proprietary trading firm. Pay in USD, withdraw profits in INR to your RBI-registered bank account.</p>
+        </div>
+        <div>
+          <h4 class="font-display font-semibold text-sm mb-4" style="color:var(--fg-muted);text-transform:uppercase;letter-spacing:1px;">Product</h4>
+          <div class="flex flex-col gap-2">
+            <a href="#pricing" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Pricing</a>
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Trading Rules</a>
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">INR Withdrawal</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-display font-semibold text-sm mb-4" style="color:var(--fg-muted);text-transform:uppercase;letter-spacing:1px;">Company</h4>
+          <div class="flex flex-col gap-2">
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">About</a>
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Blog</a>
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Careers</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-display font-semibold text-sm mb-4" style="color:var(--fg-muted);text-transform:uppercase;letter-spacing:1px;">Legal</h4>
+          <div class="flex flex-col gap-2">
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Terms of Service</a>
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">Privacy Policy</a>
+            <a href="#" style="color:var(--fg-muted);font-size:14px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-muted)'">RBI Compliance</a>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:24px;" class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-xs" style="color:var(--fg-muted);">2025 Trusted Funder LLC. All rights reserved. Trading involves substantial risk.</p>
+        <div class="flex items-center gap-4">
+          <a href="#" style="color:var(--fg-muted);transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--fg-muted)'" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" style="color:var(--fg-muted);transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--fg-muted)'" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" style="color:var(--fg-muted);transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--fg-muted)'" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" style="color:var(--fg-muted);transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--fg-muted)'" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ========== LOGIN MODAL ========== -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="font-display font-bold text-xl">Welcome Back</h2>
+      <button onclick="closeModal('login')" style="background:none;border:none;color:var(--fg-muted);cursor:pointer;font-size:18px;" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <form onsubmit="handleLogin(event)">
+      <div class="mb-4">
+        <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Email Address</label>
+        <input type="email" class="input-field" placeholder="you@example.com" required id="loginEmail">
+      </div>
+      <div class="mb-6">
+        <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Password</label>
+        <input type="password" class="input-field" placeholder="Enter your password" required id="loginPassword">
+      </div>
+      <button type="submit" class="btn-primary w-full" style="padding:14px;">Sign In</button>
+      <p class="text-center text-sm mt-4" style="color:var(--fg-muted);">No account yet? <a href="#" onclick="closeModal('login');openModal('register');return false;" style="color:var(--accent);text-decoration:none;">Get Funded</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- ========== REGISTER MODAL ========== -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="font-display font-bold text-xl">Create Account</h2>
+      <button onclick="closeModal('register')" style="background:none;border:none;color:var(--fg-muted);cursor:pointer;font-size:18px;" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <form onsubmit="handleRegister(event)">
+      <div class="mb-4">
+        <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Full Name</label>
+        <input type="text" class="input-field" placeholder="Your full name" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Email Address</label>
+        <input type="email" class="input-field" placeholder="you@example.com" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Password</label>
+        <input type="password" class="input-field" placeholder="Min 8 characters" required minlength="8">
+      </div>
+      <div class="mb-6">
+        <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Confirm Password</label>
+        <input type="password" class="input-field" placeholder="Re-enter password" required minlength="8">
+      </div>
+      <button type="submit" class="btn-primary w-full" style="padding:14px;">Create Account</button>
+      <p class="text-center text-sm mt-4" style="color:var(--fg-muted);">Already have an account? <a href="#" onclick="closeModal('register');openModal('login');return false;" style="color:var(--accent);text-decoration:none;">Sign In</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- ========== PORTAL PAGE ========== -->
+<div id="portalPage" style="display:none;">
+  <aside class="sidebar" id="portalSidebar">
+    <div style="padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent-bright));border-radius:5px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-handshake" style="color:#0a0a0b;font-size:10px;"></i></div>
+      <span class="font-display font-bold text-sm">Trusted Funder</span>
+      <span id="portalBadge" class="badge ml-auto" style="background:rgba(61,186,111,.1);color:var(--success);font-size:9px;padding:2px 8px;">FUNDED</span>
+    </div>
+    <nav style="padding:12px 0;flex:1;" id="sidebarNav">
+      <button class="sidebar-link active" onclick="switchPortalTab('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard</button>
+      <button class="sidebar-link" onclick="switchPortalTab('trades',this)"><i class="fas fa-exchange-alt"></i> Trade History</button>
+      <!-- Withdrawal tab — ONLY visible for admin -->
+      <button class="sidebar-link" id="withdrawalNavBtn" onclick="switchPortalTab('withdrawal',this)" style="display:none;">
+        <i class="fas fa-money-bill-wave" style="color:var(--inr);"></i> <span style="color:var(--inr);">Withdrawal</span>
+      </button>
+      <button class="sidebar-link" onclick="switchPortalTab('rules',this)"><i class="fas fa-book"></i> Rules</button>
+      <button class="sidebar-link" onclick="switchPortalTab('settings',this)"><i class="fas fa-cog"></i> Settings</button>
+    </nav>
+    <div style="padding:16px;border-top:1px solid var(--border);">
+      <button class="sidebar-link" onclick="logoutPortal()" style="color:var(--danger);"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="portal-main">
+    <button class="mobile-menu-btn mb-4" onclick="document.getElementById('portalSidebar').classList.toggle('open')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+
+    <!-- Dashboard Tab -->
+    <div id="tab-dashboard" class="portal-tab">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 class="font-display font-bold text-2xl mb-1">Dashboard</h1>
+          <p class="text-sm" style="color:var(--fg-muted);">Account #TF-78432 — $100,000 Funded</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="badge" style="background:rgba(61,186,111,.1);color:var(--success);border:1px solid rgba(61,186,111,.2);">Active</span>
+          <span class="text-sm" style="color:var(--fg-muted);">Started Jan 15, 2025</span>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="card p-5 stat-pulse">
+          <p class="text-xs mb-1" style="color:var(--fg-muted);">Account Balance</p>
+          <p class="font-display font-bold text-2xl" style="color:var(--success);">$104,827</p>
+          <p class="text-xs mt-1" style="color:var(--success);">+$4,827 total</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-xs mb-1" style="color:var(--fg-muted);">Max Drawdown Used</p>
+          <p class="font-display font-bold text-2xl">3.2%</p>
+          <p class="text-xs mt-1" style="color:var(--fg-muted);">Limit: 6%</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-xs mb-1" style="color:var(--fg-muted);">Win Rate</p>
+          <p class="font-display font-bold text-2xl">67.4%</p>
+          <p class="text-xs mt-1" style="color:var(--success);">Last 30 days</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-xs mb-1" style="color:var(--fg-muted);">Profit in INR</p>
+          <p class="font-display font-bold text-2xl" style="color:var(--inr);" id="dashINRProfit">₹4,03,218</p>
+          <p class="text-xs mt-1" style="color:var(--fg-muted);">At live rate</p>
+        </div>
+      </div>
+      <div class="card p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-display font-semibold text-lg">Equity Curve</h3>
+          <div class="flex items-center gap-2">
+            <button onclick="updateChart('7d',this)" class="chart-range-btn text-xs px-3 py-1 rounded-md" style="background:rgba(200,164,78,.1);color:var(--accent);border:none;cursor:pointer;">7D</button>
+            <button onclick="updateChart('30d',this)" class="chart-range-btn text-xs px-3 py-1 rounded-md" style="background:transparent;color:var(--fg-muted);border:1px solid var(--border);cursor:pointer;">30D</button>
+            <button onclick="updateChart('all',this)" class="chart-range-btn text-xs px-3 py-1 rounded-md" style="background:transparent;color:var(--fg-muted);border:1px solid var(--border);cursor:pointer;">All</button>
+          </div>
+        </div>
+        <canvas id="equityChart" height="220"></canvas>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-4">Top Instruments</h3>
+          <div class="flex flex-col gap-3" id="topInstruments"></div>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-4">Recent Activity</h3>
+          <div class="flex flex-col gap-3" id="recentActivity"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trade History Tab -->
+    <div id="tab-trades" class="portal-tab" style="display:none;">
+      <h1 class="font-display font-bold text-2xl mb-6">Trade History</h1>
+      <div class="card overflow-x-auto">
+        <div class="trade-row" style="font-weight:600;color:var(--fg-muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);">
+          <span>Pair</span><span>Type</span><span>Lots</span><span>Open</span><span>Close</span><span>P&L</span><span>Time</span>
+        </div>
+        <div id="tradeHistoryRows"></div>
+      </div>
+    </div>
+
+    <!-- WITHDRAWAL TAB — ADMIN ONLY -->
+    <div id="tab-withdrawal" class="portal-tab" style="display:none;">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <h1 class="font-display font-bold text-2xl mb-1" style="color:var(--inr);">Withdrawal Panel</h1>
+          <p class="text-sm" style="color:var(--fg-muted);">Admin-only: Process INR withdrawals to RBI-registered bank accounts</p>
+        </div>
+        <span class="badge" style="background:var(--inr-dim);color:var(--inr);border:1px solid var(--inr-border);padding:5px 12px;font-size:12px;">
+          <i class="fas fa-lock" style="font-size:9px;"></i> Admin Access
+        </span>
+      </div>
+
+      <!-- Rate display -->
+      <div class="card-inr p-5 mb-6 mt-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="inr-flag"></span>
+            <div>
+              <p class="text-xs" style="color:var(--fg-muted);">Current USD/INR Rate</p>
+              <p class="font-display font-bold text-xl" style="color:var(--inr);" id="withdrawalRate">₹83.52</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <p class="text-xs" style="color:var(--fg-muted);">Total Profit Available</p>
+              <p class="font-display font-bold text-lg">$4,827</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs" style="color:var(--fg-muted);">In INR</p>
+              <p class="font-display font-bold text-lg" style="color:var(--inr);" id="withdrawalINRTotal">₹4,03,218</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New withdrawal form -->
+      <div class="card-inr p-6 mb-6">
+        <h3 class="font-display font-semibold text-lg mb-5" style="color:var(--inr);">Process New Withdrawal</h3>
+        <form onsubmit="processWithdrawal(event)">
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Amount (USD)</label>
+              <input type="number" class="input-field input-inr" placeholder="e.g. 1000" required min="10" max="4827" id="wdUSD" oninput="calcWithdrawalINR()">
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Amount (INR)</label>
+              <input type="text" class="input-field" id="wdINR" readonly style="color:var(--inr);cursor:default;" placeholder="Auto-calculated">
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Account Holder Name</label>
+              <input type="text" class="input-field input-inr" placeholder="Name as on bank account" required>
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Bank Name</label>
+              <input type="text" class="input-field input-inr" placeholder="e.g. State Bank of India" required>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Account Number</label>
+              <input type="text" class="input-field input-inr" placeholder="e.g. 1234567890123" required pattern="[0-9]{8,18}">
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">IFSC Code</label>
+              <input type="text" class="input-field input-inr" placeholder="e.g. SBIN0001234" required pattern="[A-Z]{4}0[A-Z0-9]{6}" style="text-transform:uppercase;">
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Transfer Mode</label>
+              <select class="input-field input-inr" required style="cursor:pointer;">
+                <option value="">Select mode</option>
+                <option value="neft">NEFT (1-2 hours)</option>
+                <option value="imps">IMPS (Instant)</option>
+                <option value="rtgs">RTGS (Above ₹2,00,000)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">RBI Remittance Reference</label>
+              <input type="text" class="input-field input-inr" placeholder="Auto-generated" readonly style="cursor:default;" id="wdRef">
+            </div>
+          </div>
+          <button type="submit" class="btn-inr w-full" style="padding:14px;">
+            <i class="fas fa-paper-plane mr-2"></i> Process Withdrawal to Bank
+          </button>
+        </form>
+      </div>
+
+      <!-- Withdrawal history -->
+      <div class="card overflow-hidden">
+        <div class="px-6 py-4" style="border-bottom:1px solid var(--border);">
+          <h3 class="font-display font-semibold" style="color:var(--inr);">Withdrawal History</h3>
+        </div>
+        <div class="withdrawal-row" style="font-weight:600;color:var(--fg-muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);">
+          <span>Date</span><span>USD</span><span>INR</span><span>Bank</span><span>Mode</span><span>Status</span>
+        </div>
+        <div id="withdrawalHistoryRows"></div>
+      </div>
+    </div>
+
+    <!-- Rules Tab -->
+    <div id="tab-rules" class="portal-tab" style="display:none;">
+      <h1 class="font-display font-bold text-2xl mb-6">Trading Rules</h1>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-3" style="color:var(--accent);">Drawdown Limits</h3>
+          <ul class="flex flex-col gap-2 text-sm" style="color:var(--fg-muted);list-style:none;">
+            <li><span style="color:var(--fg);">Daily Drawdown:</span> 4% of starting balance</li>
+            <li><span style="color:var(--fg);">Max Drawdown:</span> 6% of starting balance</li>
+            <li><span style="color:var(--fg);">Trailing:</span> Based on high-water mark</li>
+          </ul>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-3" style="color:var(--accent);">Trading Restrictions</h3>
+          <ul class="flex flex-col gap-2 text-sm" style="color:var(--fg-muted);list-style:none;">
+            <li><span style="color:var(--success);"><i class="fas fa-check mr-1"></i></span> News trading allowed</li>
+            <li><span style="color:var(--success);"><i class="fas fa-check mr-1"></i></span> Weekend holding allowed</li>
+            <li><span style="color:var(--danger);"><i class="fas fa-times mr-1"></i></span> No martingale strategies</li>
+            <li><span style="color:var(--danger);"><i class="fas fa-times mr-1"></i></span> No latency exploitation</li>
+          </ul>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-3" style="color:var(--inr);">Withdrawal Policy</h3>
+          <ul class="flex flex-col gap-2 text-sm" style="color:var(--fg-muted);list-style:none;">
+            <li><span style="color:var(--fg);">Currency:</span> USD profit converted to INR</li>
+            <li><span style="color:var(--fg);">Rate:</span> Live USD/INR at processing time</li>
+            <li><span style="color:var(--fg);">Method:</span> NEFT / IMPS / RTGS</li>
+            <li><span style="color:var(--fg);">Eligible:</span> After 14 calendar days</li>
+          </ul>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-3" style="color:var(--inr);">Bank Requirements</h3>
+          <ul class="flex flex-col gap-2 text-sm" style="color:var(--fg-muted);list-style:none;">
+            <li><i class="fas fa-university mr-2" style="color:var(--inr);"></i> Must be RBI-registered bank</li>
+            <li><i class="fas fa-id-card mr-2" style="color:var(--inr);"></i> Name must match KYC</li>
+            <li><i class="fas fa-barcode mr-2" style="color:var(--inr);"></i> Valid IFSC code required</li>
+            <li><i class="fas fa-file-alt mr-2" style="color:var(--inr);"></i> Proper remittance reference</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="tab-settings" class="portal-tab" style="display:none;">
+      <h1 class="font-display font-bold text-2xl mb-6">Settings</h1>
+      <div class="max-w-lg">
+        <div class="card p-6 mb-4">
+          <h3 class="font-display font-semibold mb-4">Profile</h3>
+          <div class="mb-4">
+            <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Display Name</label>
+            <input type="text" class="input-field" value="Alex Morgan">
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-medium mb-2" style="color:var(--fg-muted);">Email</label>
+            <input type="email" class="input-field" value="alex@trading.com">
+          </div>
+          <button class="btn-primary" style="padding:10px 24px;font-size:13px;" onclick="showToast('Profile updated successfully','success')">Save Changes</button>
+        </div>
+        <div class="card p-6">
+          <h3 class="font-display font-semibold mb-4">Notifications</h3>
+          <div class="flex flex-col gap-3">
+            <label class="flex items-center justify-between cursor-pointer"><span class="text-sm">Email trade alerts</span><input type="checkbox" checked style="accent-color:var(--accent);width:18px;height:18px;"></label>
+            <label class="flex items-center justify-between cursor-pointer"><span class="text-sm">Withdrawal confirmations</span><input type="checkbox" checked style="accent-color:var(--accent);width:18px;height:18px;"></label>
+            <label class="flex items-center justify-between cursor-pointer"><span class="text-sm">Marketing emails</span><input type="checkbox" style="accent-color:var(--accent);width:18px;height:18px;"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ==================== ADMIN CREDENTIALS ====================
+   ONLY this email/password combo unlocks the withdrawal tab.
+   Change these to your actual credentials.
+*/
+const ADMIN_EMAIL = 'admin@trustedfunder.com';
+const ADMIN_PASS = 'TFadmin@2025';
+let isAdmin = false;
+let currentPhase = '1-phase';
+let currentRate = 83.52;
+let equityChart = null;
+
+/* ==================== DATA ==================== */
+const tickerData = [
+  {pair:'EUR/USD',price:'1.0847',change:'+0.12%',up:true},{pair:'GBP/USD',price:'1.2715',change:'-0.08%',up:false},
+  {pair:'USD/JPY',price:'149.82',change:'+0.34%',up:true},{pair:'XAU/USD',price:'2,648.30',change:'+1.02%',up:true},
+  {pair:'US30',price:'43,287',change:'+0.45%',up:true},{pair:'NAS100',price:'19,842',change:'-0.22%',up:false},
+  {pair:'BTC/USD',price:'97,410',change:'+2.15%',up:true},{pair:'EUR/GBP',price:'0.8534',change:'+0.05%',up:true},
+  {pair:'AUD/USD',price:'0.6591',change:'-0.15%',up:false},{pair:'US OIL',price:'71.24',change:'+0.67%',up:true},
+];
+
+const pricingPlans = {
+  '1-phase':[
+    {size:'$10,000',price:'$79',profit:'8%',dd:'5%',split:'80%',featured:false},
+    {size:'$50,000',price:'$249',profit:'8%',dd:'5%',split:'85%',featured:true},
+    {size:'$100,000',price:'$399',profit:'8%',dd:'5%',split:'85%',featured:false},
+    {size:'$200,000',price:'$699',profit:'8%',dd:'5%',split:'90%',featured:false},
+  ],
+  '2-phase':[
+    {size:'$10,000',price:'$49',profit:'5% + 5%',dd:'5%',split:'80%',featured:false},
+    {size:'$50,000',price:'$149',profit:'5% + 5%',dd:'5%',split:'85%',featured:true},
+    {size:'$100,000',price:'$279',profit:'5% + 5%',dd:'5%',split:'85%',featured:false},
+    {size:'$200,000',price:'$449',profit:'5% + 5%',dd:'5%',split:'90%',featured:false},
+  ]
+};
+
+const faqData = [
+  {q:'How do INR withdrawals work?',a:'Your USD profits are automatically converted at the live USD/INR exchange rate at the time of processing and transferred directly to your RBI-registered bank account via NEFT, IMPS, or RTGS within 24 hours.'},
+  {q:'What bank details do I need to provide?',a:'You need your account holder name (must match KYC), bank account number, IFSC code, and bank name. All banks must be RBI-registered. The withdrawal is processed only by the admin after verification.'},
+  {q:'Is the USD to INR rate fixed?',a:'No. The rate is the live market rate at the exact time your withdrawal is processed. A real-time rate is always displayed on the dashboard so you know exactly what to expect.'},
+  {q:'Can I withdraw in USD instead of INR?',a:'Currently, all profit withdrawals are processed in INR to RBI-registered bank accounts only. This ensures compliance with Indian banking regulations and provides the fastest transfer times.'},
+  {q:'What is a prop trading evaluation?',a:'A prop trading evaluation is a test period where you trade a simulated account following specific rules. If you meet the profit target without breaking drawdown limits, you receive a funded account with real capital.'},
+  {q:'How fast are withdrawals processed?',a:'Withdrawal requests are reviewed and processed within 24 hours. IMPS transfers are instant, NEFT takes 1-2 hours, and RTGS is same-day for amounts above ₹2,00,000.'},
+];
+
+const tradeHistory = [
+  {pair:'EUR/USD',type:'BUY',lots:'0.5',open:'1.0823',close:'1.0847',pnl:'+$120.00',time:'14:32'},
+  {pair:'XAU/USD',type:'SELL',lots:'0.1',open:'2,658.40',close:'2,648.30',pnl:'+$101.00',time:'13:15'},
+  {pair:'GBP/USD',type:'BUY',lots:'0.3',open:'1.2701',close:'1.2689',pnl:'-$36.00',time:'11:47'},
+  {pair:'NAS100',type:'BUY',lots:'0.5',open:'19,780',close:'19,842',pnl:'+$310.00',time:'10:22'},
+  {pair:'USD/JPY',type:'SELL',lots:'0.4',open:'150.12',close:'149.82',pnl:'+$120.00',time:'09:05'},
+  {pair:'US30',type:'BUY',lots:'0.2',open:'43,150',close:'43,287',pnl:'+$274.00',time:'08:33'},
+  {pair:'EUR/USD',type:'SELL',lots:'0.6',open:'1.0861',close:'1.0852',pnl:'+$54.00',time:'16:10'},
+  {pair:'BTC/USD',type:'BUY',lots:'0.01',open:'96,800',close:'97,410',pnl:'+$61.00',time:'15:45'},
+  {pair:'AUD/USD',type:'SELL',lots:'0.4',open:'0.6610',close:'0.6591',pnl:'+$76.00',time:'12:20'},
+  {pair:'US OIL',type:'BUY',lots:'0.3',open:'70.50',close:'71.24',pnl:'+$222.00',time:'07:55'},
+];
+
+const withdrawalHistory = [
+  {date:'Jan 28, 2025',usd:'$1,842',inr:'₹1,53,841',bank:'SBI - XXXX4521',mode:'NEFT',status:'Completed'},
+  {date:'Jan 14, 2025',usd:'$1,205',inr:'₹1,00,641',bank:'HDFC - XXXX7890',mode:'IMPS',status:'Completed'},
+  {date:'Dec 30, 2024',usd:'$967',inr:'₹80,764',bank:'ICICI - XXXX2345',mode:'NEFT',status:'Completed'},
+  {date:'Dec 15, 2024',usd:'$1,540',inr:'₹1,28,620',bank:'BOB - XXXX6789',mode:'RTGS',status:'Completed'},
+];
+
+const topInstruments = [
+  {name:'NAS100',pnl:'+$2,140',pct:'44%',color:'var(--accent)'},
+  {name:'XAU/USD',pnl:'+$1,280',pct:'26%',color:'var(--accent)'},
+  {name:'EUR/USD',pnl:'+$890',pct:'18%',color:'var(--accent)'},
+  {name:'US30',pnl:'+$560',pct:'12%',color:'var(--accent)'},
+];
+
+const recentActivity = [
+  {text:'Closed BUY 0.5 EUR/USD',pnl:'+$120',time:'2 min ago',up:true},
+  {text:'Closed SELL 0.1 XAU/USD',pnl:'+$101',time:'1h ago',up:true},
+  {text:'Closed BUY 0.3 GBP/USD',pnl:'-$36',time:'2h ago',up:false},
+  {text:'Closed BUY 0.5 NAS100',pnl:'+$310',time:'4h ago',up:true},
+  {text:'INR withdrawal completed',pnl:'₹1,53,841',time:'1d ago',up:true},
+];
+
+/* ==================== INIT ==================== */
+document.addEventListener('DOMContentLoaded', () => {
+  buildTicker();buildPricing();buildFAQ();buildTradeHistory();
+  buildWithdrawalHistory();buildTopInstruments();buildRecentActivity();
+  initCounters();initScrollReveal();initHeroParticles();initEquityChart();
+  initNavScroll();generateRefCode();simulateRateFluctuation();
+});
+
+/* ==================== INR RATE ==================== */
+function formatINR(num) {
+  // Indian numbering system: e.g. 4,03,218
+  const parts = num.toFixed(0).split('.');
+  let intPart = parts[0];
+  const decPart = parts.length > 1 ? '.' + parts[1] : '';
+  if (intPart.length > 3) {
+    const last3 = intPart.slice(-3);
+    const rest = intPart.slice(0, -3);
+    const formatted = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+    return '₹' + formatted + ',' + last3 + decPart;
+  }
+  return '₹' + intPart + decPart;
+}
+
+function updateRateDisplays() {
+  document.getElementById('liveINRRate').textContent = formatINR(currentRate);
+  document.getElementById('conv100').textContent = formatINR(currentRate * 100);
+  document.getElementById('conv1000').textContent = formatINR(currentRate * 1000);
+  document.getElementById('conv5000').textContent = formatINR(currentRate * 5000);
+  // Dashboard INR profit
+  const dashINR = document.getElementById('dashINRProfit');
+  if (dashINR) dashINR.textContent = formatINR(4827 * currentRate);
+  // Withdrawal panel
+  const wdRate = document.getElementById('withdrawalRate');
+  if (wdRate) wdRate.textContent = formatINR(currentRate);
+  const wdTotal = document.getElementById('withdrawalINRTotal');
+  if (wdTotal) wdTotal.textContent = formatINR(4827 * currentRate);
+}
+
+function simulateRateFluctuation() {
+  setInterval(() => {
+    // Small random fluctuation around base rate
+    currentRate += (Math.random() - 0.48) * 0.08;
+    currentRate = Math.max(82.5, Math.min(85.0, currentRate));
+    updateRateDisplays();
+    // Also update any open withdrawal calculation
+    calcWithdrawalINR();
+  }, 60000); // Every 60 seconds
+}
+
+function calcWithdrawalINR() {
+  const usdInput = document.getElementById('wdUSD');
+  const inrInput = document.getElementById('wdINR');
+  if (usdInput && inrInput && usdInput.value) {
+    const usd = parseFloat(usdInput.value);
+    if (!isNaN(usd) && usd > 0) {
+      inrInput.value = formatINR(usd * currentRate);
+    } else {
+      inrInput.value = '';
+    }
+  }
+}
+
+function generateRefCode() {
+  const el = document.getElementById('wdRef');
+  if (el) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = 'TF-';
+    for (let i = 0; i < 10; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+    el.value = code;
+  }
+}
+
+/* ==================== WITHDRAWAL PROCESSING ==================== */
+function processWithdrawal(e) {
+  e.preventDefault();
+  const usdInput = document.getElementById('wdUSD');
+  const usd = parseFloat(usdInput.value);
+  if (isNaN(usd) || usd < 10) {
+    showToast('Minimum withdrawal is $10','error');
+    return;
+  }
+  if (usd > 4827) {
+    showToast('Amount exceeds available profit','error');
+    return;
+  }
+  const inrAmt = formatINR(usd * currentRate);
+  showToast(`Withdrawal of $${usd} (${inrAmt}) processed successfully to RBI bank account.`,'inr');
+  // Add to history
+  const form = e.target;
+  const bank = form.querySelector('input[placeholder*="State Bank"], input[placeholder*="e.g. State"]').value || 'Bank';
+  const mode = form.querySelector('select').value.toUpperCase() || 'NEFT';
+  const today = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const newRow = {date:today, usd:'$'+usd.toLocaleString(), inr:inrAmt, bank:bank.split(' ').slice(0,2).join(' '), mode:mode, status:'Processing'};
+  withdrawalHistory.unshift(newRow);
+  buildWithdrawalHistory();
+  form.reset();
+  generateRefCode();
+  document.getElementById('wdINR').value = '';
+}
+
+function buildWithdrawalHistory() {
+  const el = document.getElementById('withdrawalHistoryRows');
+  if (!el) return;
+  el.innerHTML = withdrawalHistory.map(w => {
+    const statusColor = w.status === 'Completed' ? 'var(--success)' : 'var(--inr)';
+    const statusBg = w.status === 'Completed' ? 'rgba(61,186,111,.1)' : 'var(--inr-dim)';
+    const statusBorder = w.status === 'Completed' ? 'rgba(61,186,111,.3)' : 'var(--inr-border)';
+    return `<div class="withdrawal-row">
+      <span style="color:var(--fg-muted);">${w.date}</span>
+      <span style="font-weight:600;">${w.usd}</span>
+      <span style="font-weight:600;color:var(--inr);">${w.inr}</span>
+      <span style="color:var(--fg-muted);font-size:12px;">${w.bank}</span>
+      <span class="badge" style="background:var(--inr-dim);color:var(--inr);border:1px solid var(--inr-border);font-size:10px;">${w.mode}</span>
+      <span><span class="badge" style="background:${statusBg};color:${statusColor};border:1px solid ${statusBorder};font-size:10px;">${w.status}</span></span>
+    </div>`;
+  }).join('');
+}
+
+/* ==================== TICKER ==================== */
+function buildTicker() {
+  const el = document.getElementById('tickerTape');
+  let html = '';
+  for (let r = 0; r < 2; r++) {
+    tickerData.forEach(t => {
+      const c = t.up ? 'var(--success)' : 'var(--danger)';
+      const ic = t.up ? 'fa-caret-up' : 'fa-caret-down';
+      html += `<span style="display:inline-flex;align-items:center;gap:8px;padding:0 24px;font-size:12px;font-weight:500;">
+        <span style="color:var(--fg-muted);">${t.pair}</span>
+        <span style="color:var(--fg);">${t.price}</span>
+        <span style="color:${c};"><i class="fas ${ic}" style="margin-right:2px;"></i>${t.change}</span>
+      </span>`;
+    });
+  }
+  el.innerHTML = html;
+}
+
+/* ==================== PRICING ==================== */
+function buildPricing() {
+  const grid = document.getElementById('pricingGrid');
+  const plans = pricingPlans[currentPhase];
+  grid.innerHTML = plans.map(p => {
+    const feat = p.featured ? 'pricing-featured' : '';
+    const badge = p.featured ? `<span class="badge mb-4" style="background:rgba(200,164,78,.1);color:var(--accent);border:1px solid rgba(200,164,78,.2);">Most Popular</span>` : '';
+    return `<div class="card p-6 ${feat}" style="display:flex;flex-direction:column;">
+      ${badge}
+      <p class="font-display font-bold text-3xl mb-1">${p.size}</p>
+      <p class="text-sm mb-5" style="color:var(--fg-muted);">Account Size</p>
+      <div class="mb-6">
+        <span class="font-display font-bold text-2xl" style="color:var(--accent);">${p.price}</span>
+        <span class="text-xs" style="color:var(--fg-muted);"> one-time USD</span>
+      </div>
+      <div class="flex flex-col gap-3 mb-4 flex-1">
+        <div class="flex items-center gap-2 text-sm"><i class="fas fa-check" style="color:var(--success);font-size:11px;"></i><span style="color:var(--fg-muted);">Profit Target:</span><span>${p.profit}</span></div>
+        <div class="flex items-center gap-2 text-sm"><i class="fas fa-check" style="color:var(--success);font-size:11px;"></i><span style="color:var(--fg-muted);">Max DD:</span><span>${p.dd}</span></div>
+        <div class="flex items-center gap-2 text-sm"><i class="fas fa-check" style="color:var(--success);font-size:11px;"></i><span style="color:var(--fg-muted);">Profit Split:</span><span>${p.split}</span></div>
+        <div class="flex items-center gap-2 text-sm"><i class="fas fa-check" style="color:var(--success);font-size:11px;"></i><span style="color:var(--fg-muted);">News trading</span></div>
+        <div class="flex items-center gap-2 text-sm"><i class="fas fa-check" style="color:var(--success);font-size:11px;"></i><span style="color:var(--fg-muted);">Weekend holding</span></div>
+      </div>
+      <div class="mb-4 p-2 rounded-lg text-center" style="background:var(--inr-dim);border:1px solid var(--inr-border);">
+        <span class="text-xs" style="color:var(--inr);"><span class="inr-flag" style="margin-right:4px;vertical-align:middle;"></span> Payouts in INR to your bank</span>
+      </div>
+      <button class="btn-primary w-full" style="padding:12px;" onclick="openModal('register')">Get Started</button>
+    </div>`;
+  }).join('');
+}
+
+function togglePricingPhase() {
+  const dot = document.getElementById('phaseToggleDot');
+  const l1 = document.getElementById('phaseLabel1');
+  const l2 = document.getElementById('phaseLabel2');
+  if (currentPhase === '1-phase') {
+    currentPhase = '2-phase'; dot.style.transform = 'translateX(22px)';
+    l1.style.color = 'var(--fg-muted)'; l2.style.color = 'var(--accent)';
+  } else {
+    currentPhase = '1-phase'; dot.style.transform = 'translateX(0)';
+    l1.style.color = 'var(--accent)'; l2.style.color = 'var(--fg-muted)';
+  }
+  buildPricing();
+}
+
+/* ==================== FAQ ==================== */
+function buildFAQ() {
+  const el = document.getElementById('faqContainer');
+  el.innerHTML = faqData.map((f,i) => `
+    <div class="faq-item" id="faq-${i}">
+      <button class="faq-question" onclick="toggleFAQ(${i})">${f.q}<i class="fas fa-chevron-down faq-chevron"></i></button>
+      <div class="faq-answer"><p class="text-sm" style="color:var(--fg-muted);line-height:1.7;">${f.a}</p></div>
+    </div>
+  `).join('');
+}
+function toggleFAQ(i) {
+  const item = document.getElementById(`faq-${i}`);
+  document.querySelectorAll('.faq-item.open').forEach(el => { if(el!==item) el.classList.remove('open'); });
+  item.classList.toggle('open');
+}
+
+/* ==================== TRADE HISTORY ==================== */
+function buildTradeHistory() {
+  const el = document.getElementById('tradeHistoryRows');
+  el.innerHTML = tradeHistory.map(t => {
+    const pc = t.pnl.startsWith('+') ? 'var(--success)' : 'var(--danger)';
+    const tc = t.type === 'BUY' ? 'var(--success)' : 'var(--danger)';
+    return `<div class="trade-row">
+      <span style="font-weight:500;">${t.pair}</span>
+      <span style="color:${tc};font-weight:600;font-size:11px;">${t.type}</span>
+      <span>${t.lots}</span><span>${t.open}</span><span>${t.close}</span>
+      <span style="color:${pc};font-weight:600;">${t.pnl}</span>
+      <span style="color:var(--fg-muted);">${t.time}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ==================== TOP INSTRUMENTS / RECENT ACTIVITY ==================== */
+function buildTopInstruments() {
+  document.getElementById('topInstruments').innerHTML = topInstruments.map(t => `
+    <div class="flex items-center justify-between">
+      <div><span class="text-sm font-medium">${t.name}</span><span class="text-xs ml-2" style="color:var(--fg-muted);">${t.pct} of profit</span></div>
+      <span class="text-sm font-semibold" style="color:var(--success);">${t.pnl}</span>
+    </div>
+    <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;">
+      <div style="height:100%;width:${t.pct};background:var(--accent);border-radius:2px;transition:width 1s;"></div>
+    </div>
+  `).join('');
+}
+function buildRecentActivity() {
+  document.getElementById('recentActivity').innerHTML = recentActivity.map(a => `
+    <div class="flex items-center justify-between">
+      <div><span class="text-sm">${a.text}</span><span class="text-xs ml-2" style="color:var(--fg-muted);">${a.time}</span></div>
+      <span class="text-sm font-semibold" style="color:${a.up?'var(--success)':'var(--danger)'};">${a.pnl}</span>
+    </div>
+  `).join('');
+}
+
+/* ==================== COUNTERS ==================== */
+function initCounters() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ animateCounter(e.target); obs.unobserve(e.target); } });
+  }, {threshold:0.5});
+  document.querySelectorAll('.counter-value').forEach(c => obs.observe(c));
+}
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const start = performance.now();
+  function update(now) {
+    const p = Math.min((now-start)/2000, 1);
+    const eased = 1 - Math.pow(1-p, 3);
+    el.textContent = prefix + Math.floor(eased*target).toLocaleString() + suffix;
+    if(p<1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+/* ==================== SCROLL REVEAL ==================== */
+function initScrollReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('revealed'); });
+  }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+}
+
+/* ==================== HERO PARTICLES ==================== */
+function initHeroParticles() {
+  const c = document.getElementById('heroParticles');
+  for(let i=0;i<30;i++){
+    const p = document.createElement('div');
+    p.style.cssText = `position:absolute;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;background:var(--accent);border-radius:50%;left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:0;animation:floatUp ${Math.random()*4+3}s ease-in-out ${Math.random()*4}s infinite;pointer-events:none;`;
+    c.appendChild(p);
+  }
+}
+
+/* ==================== EQUITY CHART ==================== */
+function initEquityChart() {
+  const ctx = document.getElementById('equityChart');
+  if(!ctx) return;
+  if(equityChart) { equityChart.destroy(); }
+  equityChart = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets:[{
+        label:'Equity',data:[100000,100450,100890,100620,101340,101890,104827],
+        borderColor:'#c8a44e',backgroundColor:'rgba(200,164,78,.05)',borderWidth:2,fill:true,tension:.4,
+        pointRadius:3,pointBackgroundColor:'#c8a44e',pointBorderColor:'#0a0a0b',pointBorderWidth:2,pointHoverRadius:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#18181b',titleColor:'#f0ece4',bodyColor:'#c8a44e',borderColor:'#2a2a2e',borderWidth:1,cornerRadius:8,padding:12,callbacks:{label:ctx=>'$'+ctx.parsed.y.toLocaleString()}}},
+      scales:{x:{grid:{color:'rgba(42,42,46,.5)',drawBorder:false},ticks:{color:'#8a8680',font:{size:11}}},y:{grid:{color:'rgba(42,42,46,.5)',drawBorder:false},ticks:{color:'#8a8680',font:{size:11},callback:v=>'$'+(v/1000).toFixed(0)+'K'}}},
+      interaction:{intersect:false,mode:'index'}
+    }
+  });
+}
+function updateChart(range,btn) {
+  if(!equityChart) return;
+  document.querySelectorAll('.chart-range-btn').forEach(b=>{b.style.background='transparent';b.style.color='var(--fg-muted)';b.style.border='1px solid var(--border)';});
+  if(btn){btn.style.background='rgba(200,164,78,.1)';btn.style.color='var(--accent)';btn.style.border='none';}
+  const ds = {
+    '7d':{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],data:[100000,100450,100890,100620,101340,101890,104827]},
+    '30d':{labels:Array.from({length:30},(_,i)=>`Day ${i+1}`),data:Array.from({length:30},(_,i)=>100000+Math.sin(i*.3)*800+i*180+Math.random()*400)},
+    'all':{labels:['Week 1','Week 2','Week 3','Week 4','Week 5','Week 6'],data:[100000,100800,101500,102200,103600,104827]}
+  };
+  const d = ds[range];
+  equityChart.data.labels = d.labels;
+  equityChart.data.datasets[0].data = d.data;
+  equityChart.update('active');
+}
+
+/* ==================== NAV SCROLL ==================== */
+function initNavScroll() {
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => { nav.style.top = window.scrollY > 100 ? '0px' : '38px'; });
+}
+
+/* ==================== MOBILE NAV ==================== */
+function toggleMobileNav() {
+  const n = document.getElementById('mobileNav');
+  n.style.display = n.style.display === 'none' ? 'block' : 'none';
+}
+
+/* ==================== MODALS ==================== */
+function openModal(type) {
+  const m = document.getElementById(type+'Modal');
+  if(m){ m.classList.add('active'); document.body.style.overflow='hidden'; }
+}
+function closeModal(type) {
+  const m = document.getElementById(type+'Modal');
+  if(m){ m.classList.remove('active'); document.body.style.overflow=''; }
+}
+document.addEventListener('click', e => {
+  if(e.target.classList.contains('modal-overlay')&&e.target.classList.contains('active')){
+    e.target.classList.remove('active'); document.body.style.overflow='';
+  }
+});
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active'));document.body.style.overflow='';}
+});
+
+/* ==================== AUTH — ADMIN CHECK ==================== */
+function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('loginPassword').value;
+
+  // Check admin credentials
+  if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
+    isAdmin = true;
+    closeModal('login');
+    showToast('Admin access granted. Withdrawal panel unlocked.','inr');
+    setTimeout(() => enterPortal(), 600);
+    return;
+  }
+
+  // Regular trader login
+  isAdmin = false;
+  closeModal('login');
+  showToast('Welcome back! Logged in as trader.','success');
+  setTimeout(() => enterPortal(), 600);
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  isAdmin = false; // Registration never gives admin access
+  closeModal('register');
+  showToast('Account created! Logged in as trader.','success');
+  setTimeout(() => enterPortal(), 600);
+}
+
+function enterPortal() {
+  document.getElementById('landingPage').style.display = 'none';
+  document.getElementById('portalPage').style.display = 'block';
+  window.scrollTo(0,0);
+
+  // Show/hide withdrawal tab based on admin status
+  const wdBtn = document.getElementById('withdrawalNavBtn');
+  const portalBadge = document.getElementById('portalBadge');
+
+  if (isAdmin) {
+    wdBtn.style.display = 'flex';
+    portalBadge.textContent = 'ADMIN';
+    portalBadge.style.background = 'var(--inr-dim)';
+    portalBadge.style.color = 'var(--inr)';
+  } else {
+    wdBtn.style.display = 'none';
+    portalBadge.textContent = 'FUNDED';
+    portalBadge.style.background = 'rgba(61,186,111,.1)';
+    portalBadge.style.color = 'var(--success)';
+  }
+
+  setTimeout(() => initEquityChart(), 100);
+}
+
+function logoutPortal() {
+  isAdmin = false;
+  document.getElementById('portalPage').style.display = 'none';
+  document.getElementById('landingPage').style.display = 'block';
+  window.scrollTo(0,0);
+  showToast('Signed out successfully','info');
+}
+
+/* ==================== PORTAL TABS ==================== */
+function switchPortalTab(tab, btn) {
+  document.querySelectorAll('.portal-tab').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('tab-'+tab).style.display = 'block';
+  if(btn) btn.classList.add('active');
+  document.getElementById('portalSidebar').classList.remove('open');
+  if(tab==='dashboard') setTimeout(()=>initEquityChart(),100);
+  if(tab==='withdrawal') { updateRateDisplays(); generateRefCode(); }
+}
+
+/* ==================== TOASTS ==================== */
+function showToast(message, type) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = message;
+  c.appendChild(t);
+  setTimeout(()=>{ if(t.parentNode) t.parentNode.removeChild(t); }, 3500);
+}
+</script>
+
+</body>
+</html>
